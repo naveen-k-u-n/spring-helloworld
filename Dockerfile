@@ -1,12 +1,5 @@
-FROM maven:3.6-jdk-11-slim as BUILD
-COPY . /src
-WORKDIR /src
-RUN mvn install -DskipTests
-
-FROM openjdk:11.0.1-jre-slim-stretch
+FROM openjdk:8-alpine
+COPY target/hello-0.0.1-SNAPSHOT.jar /hello-0.0.1-SNAPSHOT.jar
 EXPOSE 8080
-WORKDIR /app
-ARG JAR=hello-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java", "-jar", "hello-0.0.1-SNAPSHOT.jar"]
 
-COPY --from=BUILD /src/target/$JAR /app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
